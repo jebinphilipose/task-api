@@ -8,4 +8,13 @@ module.exports = {
         .default('OPEN'),
     }),
   },
+  updateTask: {
+    body: Joi.object({
+      description: Joi.string().trim(),
+      status: Joi.string().trim().uppercase().valid('OPEN', 'IN_PROGRESS', 'COMPLETED'),
+    }),
+    params: Joi.object({
+      id: Joi.string().trim(),
+    }),
+  },
 };

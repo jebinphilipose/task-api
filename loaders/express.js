@@ -33,10 +33,15 @@ app.use((err, req, res, next) => {
     err.status = err.statusCode;
   }
 
+  if (err.meta && err.meta.cause === 'Record to update not found.') {
+    return res.status(400).json(requestError(400, 'Record to update not found'));
+  }
+
   if (!err.status) err.status = 500;
 
   const error = requestError(err.status, err.message);
-  if (err.status === 400) error.errors = err.details.body.map((e) => ({ message: e.message }));
+  if (err.status === 400 && err.details.body) error.errors = err.details.body.map((e) => ({ message: e.message }));
+  if (err.status === 400 && err.details.params) error.errors = err.details.params.map((e) => ({ message: e.message }));
   res.status(err.status).json(error);
 });
 

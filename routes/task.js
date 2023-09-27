@@ -8,4 +8,7 @@ const router = express.Router();
 // Create a task
 router.post('/', validate(taskValidations.createTask), controller.createTask);
 
+// Update a task
+router.put('/:id', validate(taskValidations.updateTask), controller.updateTask);
+
 module.exports = router;
