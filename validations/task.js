@@ -17,4 +17,10 @@ module.exports = {
       id: Joi.string().trim(),
     }),
   },
+  getTasks: {
+    query: Joi.object({
+      page: Joi.number(),
+      limit: Joi.number(),
+    }),
+  },
 };

@@ -33,4 +33,17 @@ module.exports = {
     }
     return res.status(200).json(task);
   },
+  getTasks: async (req, res) => {
+    let { page = 1, limit = 10 } = req.query;
+    const DECIMAL_RADIX = 10;
+    page = parseInt(page, DECIMAL_RADIX);
+    limit = parseInt(limit, DECIMAL_RADIX);
+    if (page < 1) return res.status(400).json(requestError(400, "Page can't be negative or zero"));
+    const tasksToSkip = (page - 1) * limit;
+    const tasks = await prisma.tasks.findMany({
+      skip: tasksToSkip,
+      take: limit,
+    });
+    return res.status(200).json(tasks);
+  },
 };

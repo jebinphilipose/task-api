@@ -11,4 +11,7 @@ router.post('/', validate(taskValidations.createTask), controller.createTask);
 // Update a task
 router.put('/:id', validate(taskValidations.updateTask), controller.updateTask);
 
+// Get all tasks
+router.get('/', validate(taskValidations.getTasks), controller.getTasks);
+
 module.exports = router;
