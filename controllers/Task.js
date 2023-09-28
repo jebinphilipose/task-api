@@ -44,6 +44,10 @@ module.exports = {
       skip: tasksToSkip,
       take: limit,
     });
-    return res.status(200).json(tasks);
+    return res.status(200).json({
+      tasks,
+      page,
+      count: tasks.length,
+    });
   },
 };
