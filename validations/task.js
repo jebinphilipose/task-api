@@ -23,4 +23,9 @@ module.exports = {
       limit: Joi.number(),
     }),
   },
+  getMetrics: {
+    query: Joi.object({
+      type: Joi.string().trim().lowercase().valid('count-by-status', 'count-by-timeline'),
+    }),
+  },
 };

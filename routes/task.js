@@ -14,4 +14,7 @@ router.put('/:id', validate(taskValidations.updateTask), controller.updateTask);
 // Get all tasks
 router.get('/', validate(taskValidations.getTasks), controller.getTasks);
 
+// Get task metrics
+router.get('/metrics', validate(taskValidations.getMetrics), controller.getMetrics);
+
 module.exports = router;
