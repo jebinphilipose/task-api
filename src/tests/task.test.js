@@ -1,12 +1,6 @@
 const supertest = require('supertest');
 const app = require('../loaders/express');
 
-// Mock PrismaClient
-jest.mock('@prisma/client', () => ({
-  ...jest.requireActual('@prisma/client'),
-  PrismaClient: jest.requireActual('prismock').PrismockClient,
-}));
-
 const responseMetaData = {
   description: 'Task 1 description',
   status: 'OPEN',

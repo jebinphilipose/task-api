@@ -1,6 +1,6 @@
 module.exports = {
   coverageDirectory: 'coverage',
   testMatch: [
-    '<rootDir>/tests/*.test.js',
+    '<rootDir>/src/tests/*.test.js',
   ],
 };
