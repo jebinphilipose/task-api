@@ -99,7 +99,7 @@ describe('PUT /tasks/:id', () => {
 
 // Tests for getting all tasks
 describe('GET /tasks', () => {
-  describe('when page and limit params are not provided', () => {
+  describe('when page and limit query params are not provided', () => {
     test('should return tasks for the first page', async () => {
       const response = await supertest(app).get('/api/v1/tasks');
       expect(response.body.page).toBe(1);
@@ -107,11 +107,27 @@ describe('GET /tasks', () => {
     });
   });
 
-  describe('when page is negative or zero', () => {
+  describe('when page query param is either negative or zero', () => {
     test('should repond with 400 and appropriate message', async () => {
       const response = await supertest(app).get('/api/v1/tasks?page=-1');
       expect(response.body.code).toBe(400);
       expect(response.body.message).toBe("Page can't be negative or zero");
+    });
+  });
+
+  describe('when page query param is not a number', () => {
+    test('should respond with 400 and validation failed message', async () => {
+      const response = await supertest(app).get('/api/v1/tasks?page=random');
+      expect(response.body.code).toBe(400);
+      expect(response.body.message).toBe('Validation Failed');
+    });
+  });
+
+  describe('when limit query param is not a number', () => {
+    test('should respond with 400 and validation failed message', async () => {
+      const response = await supertest(app).get('/api/v1/tasks?page=1&limit=random');
+      expect(response.body.code).toBe(400);
+      expect(response.body.message).toBe('Validation Failed');
     });
   });
 });
