@@ -28,9 +28,6 @@ module.exports = {
         status,
       },
     });
-    if (!task) {
-      return res.status(400).json(requestError(400, 'Record to update not found'));
-    }
     return res.status(200).json(task);
   },
   getTasks: async (req, res) => {

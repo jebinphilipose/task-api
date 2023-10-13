@@ -40,9 +40,9 @@ app.use((err, req, res, next) => {
   if (!err.status) err.status = 500;
 
   const error = requestError(err.status, err.message);
-  if (err.status === 400 && err.details.body) error.errors = err.details.body.map((e) => ({ message: e.message }));
-  if (err.status === 400 && err.details.params) error.errors = err.details.params.map((e) => ({ message: e.message }));
-  if (err.status === 400 && err.details.query) error.errors = err.details.query.map((e) => ({ message: e.message }));
+  if (err.status === 400 && err.details && err.details.body) error.errors = err.details.body.map((e) => ({ message: e.message }));
+  if (err.status === 400 && err.details && err.details.params) error.errors = err.details.params.map((e) => ({ message: e.message }));
+  if (err.status === 400 && err.details && err.details.query) error.errors = err.details.query.map((e) => ({ message: e.message }));
   res.status(err.status).json(error);
 });
 
