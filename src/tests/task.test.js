@@ -86,6 +86,15 @@ describe('PUT /tasks/:id', () => {
       expect(updateResponse.body.message).toBe('Record to update not found');
     });
   });
+
+  describe('when id param is an empty string', () => {
+    test('should respond with 400 and validation failed message', async () => {
+      const updateMetaData = { description: 'Updated Description', status: 'IN_PROGRESS' };
+      const updateResponse = await supertest(app).put('/api/v1/tasks/%20').send(updateMetaData);
+      expect(updateResponse.body.code).toBe(400);
+      expect(updateResponse.body.message).toBe('Validation Failed');
+    });
+  });
 });
 
 // Tests for getting all tasks
