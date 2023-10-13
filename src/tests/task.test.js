@@ -131,3 +131,35 @@ describe('GET /tasks', () => {
     });
   });
 });
+
+// Tests for getting task metrics
+describe('GET /tasks/metrics', () => {
+  describe('when incorrect type is provided in query params', () => {
+    test('should repond with 400 and validation failed message', async () => {
+      const response = await supertest(app).get('/api/v1/tasks/metrics?type=random');
+      expect(response.body.code).toBe(400);
+      expect(response.body.message).toBe('Validation Failed');
+    });
+  });
+
+  describe('when type is not provided -> defaults to count-by-status', () => {
+    test('should return 200 response', async () => {
+      const response = await supertest(app).get('/api/v1/tasks/metrics');
+      expect(response.statusCode).toBe(200);
+    });
+  });
+
+  describe('when type is count-by-status', () => {
+    test('should return 200 response', async () => {
+      const response = await supertest(app).get('/api/v1/tasks/metrics?type=count-by-status');
+      expect(response.statusCode).toBe(200);
+    });
+  });
+
+  describe('when type is count-by-timeline', () => {
+    test('should return 200 response', async () => {
+      const response = await supertest(app).get('/api/v1/tasks/metrics?type=count-by-timeline');
+      expect(response.statusCode).toBe(200);
+    });
+  });
+});
