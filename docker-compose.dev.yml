@@ -4,7 +4,7 @@ services:
     build:
       context: "."
       target: base
-    command: npm run dev
+    command: npx nodemon ./src/server.js
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
     expose:
