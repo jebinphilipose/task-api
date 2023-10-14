@@ -6,7 +6,7 @@ services:
       target: base
     command: npx nodemon ./src/server.js
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
+      PRISMA_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
     expose:
       - 3000
     ports:
@@ -26,9 +26,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     restart: always
     expose:
-      - 54320
+      - ${POSTGRES_HOST_PORT}
     ports:
-      - 54320:5432
+      - ${POSTGRES_HOST_PORT}:5432
     volumes:
       - database:/var/lib/postgresql/data
     networks:
