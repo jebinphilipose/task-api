@@ -3,6 +3,7 @@ const express = require('express');
 require('express-async-errors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
 const { ValidationError } = require('express-validation');
 const routes = require('../routes');
 const requestError = require('./requestError');
@@ -18,6 +19,9 @@ app.use(helmet());
 
 // For enabling CORS
 app.use(cors());
+
+// For gzip compression of response body
+app.use(compression());
 
 // For logging requests
 app.use(morgan('combined'));
