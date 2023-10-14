@@ -2,6 +2,7 @@ const cors = require('cors');
 const express = require('express');
 require('express-async-errors');
 const helmet = require('helmet');
+const morgan = require('morgan');
 const { ValidationError } = require('express-validation');
 const routes = require('../routes');
 const requestError = require('./requestError');
@@ -17,6 +18,9 @@ app.use(helmet());
 
 // For enabling CORS
 app.use(cors());
+
+// For logging requests
+app.use(morgan('combined'));
 
 // Register routes
 app.use('/api/v1', routes);
