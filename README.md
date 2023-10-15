@@ -55,7 +55,11 @@ A basic Node.js RESTful API for managing tasks and getting metrics. API Document
     NOTE: You must enter different values of `db`, `user`, `port` and `password` for `development` and `test` environments.
 4. Setup and run `development` server:
     ```
-    npm i && npm run docker:dev:build && npm run docker:dev:migrate && npm run docker:dev:up
+    npm run docker:dev:up
+    ```
+    Alternatively, if you don't have Node installed on your local machine, run:
+    ```
+    docker-compose -f docker-compose.dev.yml --env-file .env.development.local up -d
     ```
 5. Verify if server is running:
     ```
@@ -70,16 +74,28 @@ A basic Node.js RESTful API for managing tasks and getting metrics. API Document
     ```
     npm run docker:dev:down
     ```
+    Alternatively, if you don't have Node installed on your local machine, run:
+    ```
+    docker-compose -f docker-compose.dev.yml --env-file .env.development.local down
+    ```
 
 ### Running the tests
 
 1. Setup and run `test` server:
     ```
-    npm run docker:test:build && npm run docker:test:run
+    npm run docker:test:run
+    ```
+    Alternatively, if you don't have Node installed on your local machine, run:
+    ```
+    docker-compose -f docker-compose.test.yml --env-file .env.test.local run --rm server
     ```
 2. To stop the container after you're done:
     ```
     npm run docker:test:down
+    ```
+    Alternatively, if you don't have Node installed on your local machine, run:
+    ```
+    docker-compose -f docker-compose.test.yml --env-file .env.test.local down
     ```
 
 ## Design Decisions
