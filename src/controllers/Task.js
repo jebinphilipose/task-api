@@ -50,7 +50,19 @@ module.exports = {
   getMetrics: async (req, res) => {
     const { type = 'count-by-status' } = req.query;
     if (type === 'count-by-status') {
-      let metrics = await prisma.$queryRaw`SELECT status, COUNT(status) FROM tasks GROUP BY status`;
+      let metrics = await prisma.$queryRaw`
+        WITH status_counts AS
+          (SELECT status,
+                  COUNT(status)
+          FROM tasks
+          GROUP BY status),
+            statuses AS
+          (SELECT unnest(enum_range(NULL::status)) AS status)
+        SELECT s.status,
+              coalesce(c.count, 0) AS COUNT
+        FROM status_counts c
+        RIGHT JOIN statuses s ON c.status = s.status;
+      `;
       metrics = metrics.reduce((acc, m) => {
         const key = `${m.status.toLowerCase()}_tasks`;
         acc[key] = Number(m.count);
@@ -60,24 +72,41 @@ module.exports = {
     }
     if (type === 'count-by-timeline') {
       let metrics = await prisma.$queryRaw`
-        SELECT
-          to_char(month_year, 'Month YYYY') AS month_year,
-          status,
-          cnt
-        FROM (SELECT
-          date_trunc('month', created_at) AS month_year,
-          status,
-          COUNT(status) AS cnt
-        FROM tasks
-        GROUP BY month_year,
-                status
-        ORDER BY month_year, status) sq;
+        WITH month_counts AS
+          (SELECT To_char(month_year, 'Month YYYY') AS month_year,
+                  status,
+                  count
+          FROM
+            (SELECT Date_trunc('month', created_at) AS month_year,
+                    status,
+                    Count(status) AS count
+              FROM tasks
+              GROUP BY month_year,
+                      status
+              ORDER BY month_year,
+                      status) sq),
+            months AS
+          (SELECT DISTINCT month_year AS month_year
+          FROM month_counts),
+            month_statuses AS
+          (SELECT *
+          FROM months
+          CROSS JOIN
+            (SELECT unnest(enum_range(NULL::status)) AS status))
+        SELECT m.month_year,
+              m.status,
+              COALESCE(c.count, 0) AS count
+        FROM month_counts c
+        RIGHT JOIN month_statuses m ON c.month_year = m.month_year
+        AND c.status = m.status
+        ORDER BY to_date(m.month_year, 'Month YYYY'),
+                status;
       `;
       metrics = metrics.reduce((acc, m) => {
         if (!acc[m.month_year]) {
           acc[m.month_year] = {};
         }
-        acc[m.month_year][`${m.status.toLowerCase()}_tasks`] = Number(m.cnt);
+        acc[m.month_year][`${m.status.toLowerCase()}_tasks`] = Number(m.count);
         return acc;
       }, {});
       metrics = Object.keys(metrics).map((date) => ({
