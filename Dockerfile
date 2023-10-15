@@ -7,3 +7,5 @@ COPY . .
 RUN npm install
 RUN npx prisma generate
 RUN chmod +x ./scripts/wait-for-it.sh
+RUN chmod +x ./scripts/dev-cmd.sh
+RUN chmod +x ./scripts/test-cmd.sh

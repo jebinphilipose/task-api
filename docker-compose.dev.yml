@@ -4,7 +4,7 @@ services:
     build:
       context: "."
       target: base
-    command: npx nodemon ./src/server.js
+    command: "./scripts/wait-for-it.sh database:5432 -- ./scripts/dev-cmd.sh"
     environment:
       PRISMA_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
     expose:
