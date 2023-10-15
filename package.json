@@ -16,8 +16,7 @@
   },
   "lint-staged": {
     "**/*.js": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "author": "Jebin Philipose",
